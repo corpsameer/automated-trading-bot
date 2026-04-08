@@ -75,9 +75,19 @@ if APP_MODE not in ALLOWED_APP_MODES:
         f"Invalid APP_MODE={APP_MODE!r}. Allowed values: {sorted(ALLOWED_APP_MODES)}"
     )
 
-STORAGE_BACKEND = _get_str("STORAGE_BACKEND", "local")
-STORAGE_BASE_URL = _get_str("STORAGE_BASE_URL", "")
-STORAGE_API_TOKEN = _get_str("STORAGE_API_TOKEN", "")
+DB_HOST = _get_str("DB_HOST", "127.0.0.1")
+DB_PORT = _get_int("DB_PORT", 3306)
+DB_NAME = _get_str("DB_NAME", "telegram_coindcx_automation")
+DB_USER = _get_str("DB_USER", "root")
+DB_PASSWORD = _get_str("DB_PASSWORD", "")
+DB_CHARSET = _get_str("DB_CHARSET", "utf8mb4")
+
+if DB_CHARSET.lower() != "utf8mb4":
+    raise ValueError("DB_CHARSET must be utf8mb4 for consistent Unicode storage.")
+
+for required_name in ("DB_HOST", "DB_NAME", "DB_USER"):
+    if not globals()[required_name]:
+        raise ValueError(f"{required_name} is required. Please update your .env file.")
 
 TELEGRAM_API_ID = _get_str("TELEGRAM_API_ID", "")
 TELEGRAM_API_HASH = _get_str("TELEGRAM_API_HASH", "")
